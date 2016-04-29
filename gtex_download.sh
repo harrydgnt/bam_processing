@@ -10,7 +10,7 @@ exit 1
 fi
 
 pwd
-
+gitdir=/u/home/s/serghei/collab/gtex/bam_processing/
 target=$5
 mkdir $target
 dir=$2
@@ -25,7 +25,7 @@ echo $line
 echo $item
 echo $itemname
 
-echo "\"${4}/bin/ascp\" -QTr -l 5000M -k 1 -i \"${4}/etc/asperaweb_id_dsa.openssh\" -W ${3} dbtest@gap-upload.ncbi.nlm.nih.gov:data/instant/eeskin/48400/${line} ${target}">> download_${itemname}.sh
-echo "/u/home/h/harryyan/project-eeskin/bam_processing/bam_process_indiv.sh $5 ${item}.ncbi_enc /u/home/s/serghei/collab/gtex/decryption/ /u/home/s/serghei/collab/gtex/processed/ /u/home/s/serghei/collab/gtex/gtex_bam_gene_coordinate_list.txt"
+echo "\"${4}/bin/ascp\" -QTr -l 300M -k 1 -i \"${4}/etc/asperaweb_id_dsa.openssh\" -W ${3} dbtest@gap-upload.ncbi.nlm.nih.gov:data/instant/eeskin/49848/${line} ${target}">> download_${itemname}.sh
+echo "$gitdir/bam_process_indiv.sh $5 ${item}.ncbi_enc /u/home/s/serghei/collab/gtex/decryption/ /u/home/s/serghei/collab/gtex/processed/ /u/home/s/serghei/collab/gtex/gtex_bam_gene_coordinate_list.txt"
 echo "echo \"DONE ${itemname}\"">> download_${itemname}.sh
 done<$1
