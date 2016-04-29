@@ -46,7 +46,7 @@ echo "mv ${decdir}/$item ${dumpdir}/$ext_item_name" >> run_${itemname}.sh
 
 ### HTSeq - default gtf is set
 
-gtf = /u/home/s/serghei/project/Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf 
+gtf=/u/home/s/serghei/project/Homo_sapiens/Ensembl/GRCh37/Annotation/Genes/genes.gtf 
 
 echo "#!/bin/bash" >> run_${itemname}.sh
 echo ". /u/local/Modules/default/init/modules.sh" >> run_${itemname}.sh
