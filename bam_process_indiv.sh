@@ -54,7 +54,7 @@ echo "module load samtools" >> run_${itemname}.sh
 echo "module load bamtools" >> run_${itemname}.sh
 echo "cd ${dumpdir}/${ext_item_name}" >> run_${itemname}.sh 
 echo "samtools sort -n ${dumpdir}/${ext_item_name}/$item ${dumpdir}/${ext_item_name}/${item}_sort_byname" >> run_${itemname}.sh
-echo "module load python/2.7.3" >> run_${itemname}.sh
+echo "module load python" >> run_${itemname}.sh
 echo "python /u/home/h/harryyan/project-eeskin/utilities/HTSeq-0.6.1/scripts/htseq-count --format=bam --mode=intersection-strict --stranded=no ${dumpdir}/${ext_item_name}/${item}_sort_byname.bam $gtf >${dumpdir}/${ext_item_name}/${item}.counts" >> run_${itemname}.sh
 echo "rm -rf ${dumpdir}/${ext_item_name}/${item}_sort_byname.bam" >> run_${itemname}.sh
 
