@@ -128,7 +128,7 @@ echo "samtools index ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" 
 
 ### add ROP 
 
-echo "/u/home/h/harryyan/project-eeskin/rop/rop.py --b --qsubArray ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam ${dumpdir}/${ext_item_name}/rop/" >> run_${itemname}.sh
+echo "python /u/home/h/harryyan/project-eeskin/rop/rop.py --b --qsubArray ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam ${dumpdir}/${ext_item_name}/rop/" >> run_${itemname}.sh
 
 ### TODO - remove intermediate files
 
