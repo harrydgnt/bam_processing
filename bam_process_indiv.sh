@@ -100,7 +100,7 @@ done<$5
 
 ### TODO - ZIP the bam files 
 echo "cd ${dumpdir}/${ext_item_name}/" >> run_${itemname}.sh
-echo "tar -vf ${ext_item_name}_small_bams.tar *small*.bam --remove-files" >> run_${itemname}.sh
+echo "tar -cvf ${ext_item_name}_small_bams.tar *small*.bam --remove-files" >> run_${itemname}.sh
 
 ### extract unmapped bam - unmappped fastq extraction has been disabled
 echo "samtools view -b -f 4 ${dumpdir}/${ext_item_name}/${item} > ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" >> run_${itemname}.sh
