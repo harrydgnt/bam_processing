@@ -63,7 +63,9 @@ echo "rm -rf ${dumpdir}/${ext_item_name}/${item}_sort_byname.bam" >> run_${itemn
 
 ### bam index
 
-echo "samtools index ${dumpdir}/${ext_item_naame}/${item}" >> run_${itemname}.sh
+echo "INDEXING THE BAM FILE: ${item}" >> run_${itemname}.sh
+
+echo "samtools index ${dumpdir}/${ext_item_name}/${item}" >> run_${itemname}.sh
 
 
 
