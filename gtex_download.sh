@@ -26,6 +26,6 @@ echo $item
 echo $itemname
 
 echo "\"${4}/bin/ascp\" -QTr -l 300M -k 1 -i \"${4}/etc/asperaweb_id_dsa.openssh\" -W ${3} dbtest@gap-upload.ncbi.nlm.nih.gov:data/instant/eeskin/49848/${line} ${target}">> download_${itemname}.sh
-echo "$gitdir/bam_process_indiv.sh $5 ${item}.ncbi_enc /u/home/s/serghei/collab/gtex/decryption/ /u/home/s/serghei/collab/gtex/processed/ /u/home/s/serghei/collab/gtex/gtex_bam_gene_coordinate_list.txt"
+echo "$gitdir/bam_process_indiv.sh $5 ${item}.ncbi_enc /u/home/s/serghei/collab/gtex/decryption/ /u/home/s/serghei/collab/gtex/processed/ /u/home/s/serghei/collab/gtex/gtex_bam_gene_coordinate_list.txt" >> download_${itemname}.sh
 echo "echo \"DONE ${itemname}\"">> download_${itemname}.sh
 done<$1
