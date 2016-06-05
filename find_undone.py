@@ -27,7 +27,7 @@ def extract_sample_name(download_file):
 			count = count + 1
 			download_dict[sample.split('/')[5].split('.bam')[0]] = sample
 			if count%100 == 0:
-				print sample
+				print sample.split('/')[5].split('.bam')[0]
 	return download_dict
 
 
