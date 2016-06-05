@@ -36,7 +36,7 @@ args = ap.parse_args()
 meta_dict = extract_metadata(args.metadata)
 down_dict = extract_sample_name(args.download)
 
-outfile = open(args.output)
+outfile = open(args.output, 'w')
 for key, value in meta_dict.iteritems():
 	try: 
 		temp_line = key + "," + down_dict[key] + ',' + value
