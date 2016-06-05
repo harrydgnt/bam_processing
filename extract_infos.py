@@ -26,10 +26,21 @@ def extract_sample_name(download_file):
 	with open(download_file) as samples:
 		for sample in samples:
 			download_dict[sample.split('/')[4]] = sample.split('/')[5].split('.bam')[0]
-
+	return download_dict
 ap = argparse.ArgumentParser()
 ap.add_argument('metadata', help = 'SRR####### on the first column in CSV format')
 ap.add_argument('download', help = 'The text file given by dbgap manifest')
+ap.add_argument('output', help = 'the new metadata in csv format that includes the file name will be written on this output file')
 args = ap.parse_args()
 
-print args
+meta_dict = extract_metadata(args.metadata)
+down_dict = extract_sample_name(args.download)
+
+outfile = open(args.output)
+for key, value in meta_dict.iteritems():
+	try: 
+		temp_line = key + "," + down_dict[key] + ',' + value
+		outfile.write(temp_line)
+	except KeyError:
+		print key, " is not found in the manifest!"
+outfile.close()
