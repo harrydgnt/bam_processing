@@ -8,6 +8,7 @@ echo "	e.g. /u/home/h/harryyan/project-eeskin/decryption_test/"
 echo "[4] the dump directory where decrypted bam files would be stored." 
 echo "	the dump dir will be created and scripts will be written in this folder!" 
 echo "[5] gene list - i.e. gene_coordinate.list"
+echo "[6] immune gene list i.e. immune_coordinates.txt"
 
 exit 1
 fi 
@@ -98,47 +99,47 @@ echo "samtools view -bh ${dumpdir}/${ext_item_name}/${item} $chr:$pos_one-$pos_t
 echo "samtools view -c ${dumpdir}/${ext_item_name}/${ext_item_name}_$name.bam | echo "${name} \$1">>${dumpdir}/${ext_item_name}/${ext_item_name}.count_per_gene" >> run_${itemname}.sh
 done<$5
 
-### TODO - ZIP the bam files 
+### ZIP the bam files 
 echo "cd ${dumpdir}/${ext_item_name}/" >> run_${itemname}.sh
 echo "tar -cvf ${ext_item_name}_small_bams.tar *small*.bam --remove-files" >> run_${itemname}.sh
+
+
+### extract bam file for each immune gene
+while read gene
+do
+chr=$(echo $gene | awk -F ',' '{print $1}')
+name=$(echo $gene | awk -F ',' '{print $4}')
+pos_one=$(echo $gene | awk -F ',' '{print $5}')
+pos_two=$(echo $gene | awk -F ',' '{print $6}')
+
+echo "samtools view -bh ${dumpdir}/${ext_item_name}/${item} $chr:$pos_one-$pos_two > ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_${name}.bam" >> run_${itemname}.sh
+done<$6
+
+### extract MT genes 
+echo "samtools view -b ${dumpdir}/${ext_item_name}/${item} MT > ${dumpdir}/${ext_item_name}/${ext_item_name}_MT.bam" >> run_${itemname}.sh
+
+### read count
+echo "echo \"$(samtools view ${dumpdir}/${ext_item_name}/${item} | awk ‘{print $1}’ | sort | uniq | wc -l )\" > ${dumpdir}/${ext_item_name}/${ext_item_name}_read_count.txt" >> run_${itemname}.sh
 
 ### extract unmapped bam - unmappped fastq extraction has been disabled
 echo "samtools view -b -f 4 ${dumpdir}/${ext_item_name}/${item} > ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" >> run_${itemname}.sh
 echo "samtools index ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" >> run_${itemname}.sh
-#echo "bamtools convert -in ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam -format fastq > ${dumpdir}/${ext_item_name}/${ext_item_name}.fastq">>run_${itemname}.sh
-#echo "gzip ${dumpdir}/${ext_item_name}/${ext_item_name}.fastq">>run_${itemname}.sh
-#echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.bam">>run_${itemname}.sh
-#echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.bam.bai">>run_${itemname}.sh
-
-
-
-### QC STEPS 
-#echo "module load bedtools" >> run_${itemname}.sh
-#echo "bamToFastq -i ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam -fq ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.fastq" >> run_${itemname}.sh 
-#echo "/u/home/s/serghei/code/bin/fastq_quality_filter -v -Q 33 -q 20 -p 75 -i ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.fastq -o ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.fastq.trim">>run_${itemname}.sh
-#echo "mv ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.fastq.trim ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped_trim.fastq" >> run_${itemname}.sh 
-#echo "awk '{if(NR%4==1) {printf(\">%s\n\",substr(\$0,2));} else if(NR%4==2) print;}' ${dumpdir}/${ext_item_name}/${ext_item_name}_trim.fastq >${dumpdir}/${ext_item_name}/${ext_item_name}_trim.fa" >> run_${itemname}.sh 
-#echo "/u/home/s/serghei/project/code/import/seqclean-x86_64/seqclean ${dumpdir}/${ext_item_name}/${ext_item_name}_trim.fa -l 50 -M " >> run_${itemname}.sh
-#echo "mv ${dumpdir}/${ext_item_name}/${ext_item_name}_trim.fa.clean ${dumpdir}/${ext_item_name}/${ext_item_name}_trim_clean.fa" >> run_${itemname}.sh 
-#echo "echo \"$ext_item_name DONE \" > ${dumpdir}/${ext_item_name}/${ext_item_name}_QC.DONE" >> run_${itemname}.sh  
-#echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" >> run_${itemname}.sh 
-#echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}_trim.fastq" >> run_${itemname}.sh 
-#echo "echo \"${ext_item_name}.unmap_process.DONE\">> ${dumpdir}/${ext_item_name}/${ext_item_name}_unmap.DONE" >>run_${itemname}.sh
-#echo "rm ${dumpdir}/${ext_item_name}/$item">>run_${itemname}.sh
 
 ### add ROP 
 
-echo "python /u/home/s/serghei/code2/harry/rop/rop.py --b --qsubArray ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam ${dumpdir}/${ext_item_name}/rop/" >> run_${itemname}.sh
+echo "python /u/home/h/harryyan/project-eeskin/rop/rop.py --b --qsubArray ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam ${dumpdir}/${ext_item_name}/rop/" >> run_${itemname}.sh
 
-### TODO - remove intermediate files
+### remove intermediate files
 
-
-### genomic profile
-echo "mkdir ${dumpdir}/${ext_item_name}/genomic_profile">>run_${itemname}.sh
-echo "python /u/home/h/harryyan/project-eeskin/repeat/gprofile/gprofilePE.py --readPerCategory ${dumpdir}/${ext_item_name}/${item} ${dumpdir}/${ext_item_name}/genomic_profile/${ext_item_name}_genome h">>run_${itemname}.sh
 echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.bam">>run_${itemname}.sh
 echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.bam.bai">>run_${itemname}.sh
-echo "echo \"${ext_item_name}.gprofile.DONE\">> ${dumpdir}/${ext_item_name}/${ext_item_name}_gprofile.DONE" >>run_${itemname}.sh
+
+# ### genomic profile
+# echo "mkdir ${dumpdir}/${ext_item_name}/genomic_profile">>run_${itemname}.sh
+# echo "python /u/home/h/harryyan/project-eeskin/repeat/gprofile/gprofilePE.py --readPerCategory ${dumpdir}/${ext_item_name}/${item} ${dumpdir}/${ext_item_name}/genomic_profile/${ext_item_name}_genome h">>run_${itemname}.sh
+# echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.bam">>run_${itemname}.sh
+# echo "rm ${dumpdir}/${ext_item_name}/${ext_item_name}.bam.bai">>run_${itemname}.sh
+# echo "echo \"${ext_item_name}.gprofile.DONE\">> ${dumpdir}/${ext_item_name}/${ext_item_name}_gprofile.DONE" >>run_${itemname}.sh
 
 qsub -cwd -V -N run_${itemname} -l h_data=8G,time=24:00:00 run_${itemname}.sh 
 
