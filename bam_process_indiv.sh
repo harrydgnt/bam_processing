@@ -119,7 +119,7 @@ done<$6
 echo "samtools view -b ${dumpdir}/${ext_item_name}/${item} MT > ${dumpdir}/${ext_item_name}/${ext_item_name}_MT.bam" >> run_${itemname}.sh
 
 ### read count
-echo "echo \"$(samtools view ${dumpdir}/${ext_item_name}/${item} | awk ‘{print $1}’ | sort | uniq | wc -l )\" > ${dumpdir}/${ext_item_name}/${ext_item_name}_read_count.txt" >> run_${itemname}.sh
+echo "echo \"\$(samtools view ${dumpdir}/${ext_item_name}/${item} | awk ‘{print $1}’ | sort | uniq | wc -l )\" > ${dumpdir}/${ext_item_name}/${ext_item_name}_read_count.txt" >> run_${itemname}.sh
 
 ### extract unmapped bam - unmappped fastq extraction has been disabled
 echo "samtools view -b -f 4 ${dumpdir}/${ext_item_name}/${item} > ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" >> run_${itemname}.sh
