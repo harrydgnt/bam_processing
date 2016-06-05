@@ -16,7 +16,7 @@ def extract_done_list(sample_file):
 	sample_list = []
 	with open(sample_file) as samples:
 		for sample in samples:
-			sample_list.append(sample)
+			sample_list.append(sample.rstrip())
 	return sample_list
 
 def extract_sample_name(download_file):
@@ -43,8 +43,10 @@ down_dict = extract_sample_name(args.download)
 
 outfile = open(args.output, 'w')
 
+count = 0
 for key, value in down_dict.iteritems():
 	if key not in sample_list:
+		count += 1
 		temp_line = value
 		outfile.write(temp_line)
 	else:
