@@ -42,6 +42,6 @@ outfile = open(args.output, 'w')
 for key, value in down_dict.iteritems():
 	if key not in sample_list:
 		temp_line = value
-		outfile.write(temp)
+		outfile.write(temp_line)
 
 outfile.close()
