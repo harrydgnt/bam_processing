@@ -21,9 +21,13 @@ def extract_done_list(sample_file):
 
 def extract_sample_name(download_file):
 	download_dict = {}
+	count = 0
 	with open(download_file) as samples:
 		for sample in samples:
+			count = count + 1
 			download_dict[sample.split('/')[5].split('.bam')[0]] = sample
+			if count%100 == 0:
+				print sample
 	return download_dict
 
 
