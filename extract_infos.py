@@ -28,8 +28,8 @@ def extract_sample_name(download_file):
 			download_dict[sample.split('/')[4]] = sample.split('/')[5].split('.bam')[0]
 
 ap = argparse.ArgumentParser()
-ap.add_argument('Metadata file', help = 'SRR####### on the first column in CSV format')
-ap.add_argument('Downlaod file', help = 'The text file given by dbgap manifest')
+ap.add_argument('metadata', help = 'SRR####### on the first column in CSV format')
+ap.add_argument('download', help = 'The text file given by dbgap manifest')
 args = ap.parse_args()
 
 print args
