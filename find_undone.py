@@ -43,5 +43,7 @@ for key, value in down_dict.iteritems():
 	if key not in sample_list:
 		temp_line = value
 		outfile.write(temp_line)
+	else:
+		print key
 
 outfile.close()
