@@ -115,11 +115,17 @@ pos_two=$(echo $gene | awk -F ',' '{print $6}')
 echo "samtools view -bh ${dumpdir}/${ext_item_name}/${item} $chr:$pos_one-$pos_two > ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_${name}.bam" >> run_${itemname}.sh
 done<$6
 
+### merge BCR and TCR bbams
+# Usage:   samtools merge [-nr] [-h inh.sam] <out.bam> <in1.bam> <in2.bam> [...]
+echo "samtools merge ${dumpdir}/${ext_item_name}/${ext_item_name}_TCR.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRA.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRB.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRC.bam" >> run_${itemname}.sh
+echo "samtools merge ${dumpdir}/${ext_item_name}/${ext_item_name}_BCR.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_1.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_2.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_3.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_4.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_5.bam" >> run_${itemname}.sh
+
 ### extract MT genes 
 echo "samtools view -b ${dumpdir}/${ext_item_name}/${item} MT > ${dumpdir}/${ext_item_name}/${ext_item_name}_MT.bam" >> run_${itemname}.sh
 
 ### read count
 echo "echo \"\$(samtools view ${dumpdir}/${ext_item_name}/${item} | awk ‘{print $1}’ | sort | uniq | wc -l )\" > ${dumpdir}/${ext_item_name}/${ext_item_name}_read_count.txt" >> run_${itemname}.sh
+
 
 ### extract unmapped bam - unmappped fastq extraction has been disabled
 echo "samtools view -b -f 4 ${dumpdir}/${ext_item_name}/${item} > ${dumpdir}/${ext_item_name}/${ext_item_name}.unmapped.bam" >> run_${itemname}.sh
