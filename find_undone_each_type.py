@@ -35,7 +35,7 @@ args = ap.parse_args()
 
 down_dict = extract_sample_name(args.download_manifest)
 done_sample_list = extract_done(args.done_file)
-with open(args.out_File) as output: 
+with open(args.out_File, 'w') as output: 
 	for key, value in down_dict.iteritems():
 		if key not in done_sample_list:
 			output.write(str(value + '\n'))
