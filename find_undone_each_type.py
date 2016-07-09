@@ -23,7 +23,7 @@ def extract_done(done_file):
 	done_list = []
 	with open(done_file) as samples:
 		for sample in samples:
-			sample_name = '.'join(sample.split('.')[0:3])
+			sample_name = '.'.join(sample.split('.')[0:3])
 			done_list.append(sample_name)
 	return done_list	
 
