@@ -33,9 +33,9 @@ ap.add_argument('done_file', help = 'List of files that are done - i.e. one line
 ap.add_argument('out_File', help = 'OUTPUT will be generated in this file - it will have the things that needs to be re-downloaded and run')
 args = ap.parse_args()
 
-down_dict = extract_sample_name(ap.download_manifest)
-done_sample_list = extract_done(ap.done_file)
-with open(ap.out_File) as output: 
+down_dict = extract_sample_name(args.download_manifest)
+done_sample_list = extract_done(args.done_file)
+with open(args.out_File) as output: 
 	for key, value in down_dict.iteritems():
 		if key not in done_sample_list:
 			output.write(str(value + '\n'))
