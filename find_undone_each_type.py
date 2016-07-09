@@ -23,7 +23,7 @@ def extract_done(done_file):
 	done_list = []
 	with open(done_file) as samples:
 		for sample in samples:
-			sample_name = sample.split('.')[0:3]
+			sample_name = '.'join(sample.split('.')[0:3])
 			done_list.append(sample_name)
 	return done_list	
 
@@ -38,6 +38,6 @@ done_sample_list = extract_done(args.done_file)
 with open(args.out_File, 'w') as output: 
 	for key, value in down_dict.iteritems():
 		if key not in done_sample_list:
-			output.write(str(value + '\n'))
+			output.write(value)
 		else:
 			print "%s is found!" % (key)
