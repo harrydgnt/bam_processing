@@ -1,4 +1,4 @@
-if [ $# -lt 5 ] 
+if [ $# -lt 6 ] 
 then 
 echo "GTEx data process - Written by Harry Yang - harry2416@gmail.com"
 echo "[1] dir with .ncbi_enc files" 
@@ -7,7 +7,7 @@ echo "[3] decryption depository - provided as you set up the decryption key"
 echo "	e.g. /u/home/h/harryyan/project-eeskin/decryption_test/"
 echo "[4] the dump directory where decrypted bam files would be stored." 
 echo "	the dump dir will be created and scripts will be written in this folder!" 
-echo "[5] gene list - i.e. gene_coordinate.list"
+echo "[5] gene list - i.e. gtex_ig_C_TCR_C_genes_list.txt "
 echo "[6] immune gene list i.e. immune_coordinates.txt"
 
 exit 1
@@ -75,7 +75,7 @@ echo "samtools index ${dumpdir}/${ext_item_name}/${item}" >> run_${itemname}.sh
 
 echo "num_unmapped=\$(samtools view -c -fox4 ${dumpdir}/${ext_item_name}/${item})" >> run_${itemname}.sh
 echo "num_total=\$(samtools view -c ${dumpdir}/${ext_item_name}/${item})" >> run_${itemname}.sh
-echo "echo "\${num_unmapped}	\${num_total}" >> ${dumpdir}/unmapped_ratio.txt" >> run_${itemname}.sh
+echo "echo "\${num_unmapped}	\${num_total}" >> ${dumpdir}/${ext_item_name}/${ext_item_name}_unmapped_ratio.txt" >> run_${itemname}.sh
 
 
 ### repeat profile
@@ -117,8 +117,9 @@ done<$6
 
 ### merge BCR and TCR bbams
 # Usage:   samtools merge [-nr] [-h inh.sam] <out.bam> <in1.bam> <in2.bam> [...]
-echo "samtools merge ${dumpdir}/${ext_item_name}/${ext_item_name}_TCR.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRA.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRB.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRC.bam" >> run_${itemname}.sh
-echo "samtools merge ${dumpdir}/${ext_item_name}/${ext_item_name}_BCR.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_1.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_2.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_3.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_4.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_5.bam" >> run_${itemname}.sh
+# CURRENTLY DISABLED 
+# echo "samtools merge ${dumpdir}/${ext_item_name}/${ext_item_name}_TCR.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRA.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRB.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_TCRC.bam" >> run_${itemname}.sh
+# echo "samtools merge ${dumpdir}/${ext_item_name}/${ext_item_name}_BCR.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_1.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_2.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_3.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_4.bam ${dumpdir}/${ext_item_name}/${ext_item_name}_immune_BCR_5.bam" >> run_${itemname}.sh
 
 ### extract MT genes 
 echo "samtools view -b ${dumpdir}/${ext_item_name}/${item} MT > ${dumpdir}/${ext_item_name}/${ext_item_name}_MT.bam" >> run_${itemname}.sh
