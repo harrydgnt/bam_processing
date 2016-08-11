@@ -159,6 +159,8 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 				summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
 	summary_df.to_csv(outfile, sep = "\t")
 
+	# TODO - after indexing everything, add class. family information
+
 def test():
 	element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
 	test_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/G60826.GTEX-13O3O-0011-R1b.2.unmapped_after_rRNA_lostHuman.fasta_lostRepeats_blastFormat6.tsv'
