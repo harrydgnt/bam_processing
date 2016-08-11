@@ -135,6 +135,12 @@ def extract_reads(element_list, repeat_file):
 				continue
 	return element_dict	
 
+def make_merge_dataframe(original_df, dict_to_add, sample_name):
+	temp_df = pd.DataFrame.from_dict(dict_to_add, orient="index")
+	temp_df.columns = [sample_name]
+	return pd.merge(original_df, temp_df, left_index = True, right_index = True)
+
+
 
 def test():
 	element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
@@ -146,7 +152,7 @@ def test():
 	# for key,value in new_dict.iteritems():
 	# 	print key, "\t", value
 
-
+	test_df = pd.DataFrame()
 	test_df = pd.DataFrame.from_dict(new_dict,orient="index")
 	test_df.columns = ["G60826"]
 	print test_df
