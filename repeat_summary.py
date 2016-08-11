@@ -152,7 +152,7 @@ def test():
 	test_two = pd.DataFrame.from_dict(new_dict_two,orient="index")
 	print test_two
 
-	test_merge_df = pd.merge(test_df,test_two, left_index=True)
+	test_merge_df = pd.merge(test_df,test_two, left_index=True, right_index=True)
 	print test_merge_df	
 
 	print "shape, ", test_df.shape, test_two.shape, test_merge_df.shape
