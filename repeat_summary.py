@@ -53,23 +53,34 @@ PLAN
 4. Transpose the matrix 
 
 """
-
-
 def extract_element(element_list_file):
 	'''
 	1. extract element names from the list of elements
 	- possibly dict(list) - key = element name, value = list 
-	--> IN = list of elements
+	--> IN = list elements file
 	--> OUT = element_dict
 	'''	
-	element_dict = {}
+	element_list = []
 	with open(element_list_file, 'r') as elements:
 		for element in elements:
-			element_dict[str(element.split('>')[1].rstrip().split()[0])] = 0
-			# print str(element.split('>')[1].rstrip().split()[
-	return element_dict	
+			element_list.append(str(element.split('>')[1].rstrip().split()[0]))
+	return element_list
 
-def extract_reads(element_dict, repeat_file):
+# def make_element_dict(element_list):
+# 	'''
+# 	1. extract element names from the list of elements
+# 	- possibly dict(list) - key = element name, value = list 
+# 	--> IN = list of elements
+# 	--> OUT = element_dict
+# 	'''	
+# 	element_dict = {}
+# 	with open(element_list_file, 'r') as elements:
+# 		for element in elements:
+# 			element_dict[str(element.split('>')[1].rstrip().split()[0])] = 0
+# 			# print str(element.split('>')[1].rstrip().split()[
+# 	return element_dict	
+
+def extract_reads(element_list, repeat_file):
 	'''
 	2. extract each read's element
 	- use the cutoff?
@@ -77,6 +88,12 @@ def extract_reads(element_dict, repeat_file):
 	--> IN = element_dict, tsv file 
 	--> OUT = element_dict with updated num_reads/element
 	'''
+
+	# make dict from element list 
+	element_dict = {}
+	for item in element_list:
+		element_dict[item] = 0
+	# add number
 	with open(repeat_file, 'r') as lines:
 		status = 0 
 		# status 0 = new read
@@ -122,15 +139,24 @@ def extract_reads(element_dict, repeat_file):
 def test():
 	element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
 	test_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/G60826.GTEX-13O3O-0011-R1b.2.unmapped_after_rRNA_lostHuman.fasta_lostRepeats_blastFormat6.tsv'
-	elem_dict = extract_element(element_file)
-	new_dict = extract_reads(elem_dict, test_file)
+	test_file_two = '/u/home/h/harryyan/project-eeskin/gtex_repeat/G20897.GTEX-SN8G-0006-SM-32PLD.1.unmapped_lostRepeats_blastFormat6.tsv'
+	elem_list = extract_element(element_file)
+	new_dict = extract_reads(elem_list, test_file)
+	new_dict_two = extract_reads(elem_list, test_file_two)
 	# for key,value in new_dict.iteritems():
 	# 	print key, "\t", value
 
 
 	test_df = pd.DataFrame.from_dict(new_dict,orient="index")
 	print test_df 
+	test_two = pd.DataFrame.from_dict(new_dict_two,orient="index")
+	print test_two
 
+	test_merge_df = pd.merge(test_df,test_two, left_index=True)
+	print test_merge_df	
 
+	print "shape, ", test_df.shape, test_two.shape, test_merge_df.shape
+	# TODO - change data structure - dont make it to import the element file with default dict of int
+	# TODO - Make a list and convert it to dict to make it more usable without accessing all over again
 
 test()
