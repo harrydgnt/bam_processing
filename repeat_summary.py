@@ -128,7 +128,7 @@ def test():
 	# 	print key, "\t", value
 
 
-	test_df = pd.DataFrame.from_dict(new_dict)
+	test_df = pd.DataFrame.from_dict(new_dict,orient="index")
 	print test_df 
 
 
