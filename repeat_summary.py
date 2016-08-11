@@ -64,9 +64,10 @@ def extract_element(element_list_file):
 	'''	
 	element_dict = {}
 	with open(element_list_file, 'r') as elements:
+		print elements
 		for element in elements:
 			element_dict[str(element.split('>')[1])] = 0
-			print element
+			print element 
 	return element_dict	
 
 def extract_reads(element_dict, repeat_file):
