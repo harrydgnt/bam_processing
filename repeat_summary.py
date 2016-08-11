@@ -146,6 +146,7 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 	os.chdir(sample_dir)
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
+			sample = sample.rstrip()
 			current_dict = extract_reads(element_list, sample)
 			sample_name = sample.split('.')[1:3]	
 			print "Processing: ", sample_name
