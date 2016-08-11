@@ -144,13 +144,19 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 	element_list = extract_element(element_list_file)
 	summary_df = pd.DataFrame()
 	os.chdir(sample_dir)
+	count = 0
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
 			sample = sample.rstrip()
 			current_dict = extract_reads(element_list, sample)
-			sample_name = ''.join(sample.split('.')[1:3])
+			sample_name = '.'.join(sample.split('.')[1:3])
 			print "Processing: ", sample_name
-			summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
+			if count == 0:
+				summary_df = pd.DataFrame.from_dict(current_dict, orient = "index")
+				sumamry_df.colums = [sample_name]
+				count = -1
+			else: 
+				summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
 	summary_df.to_csv(outfile, sep = "\t")
 
 def test():
