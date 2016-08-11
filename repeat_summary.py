@@ -128,9 +128,9 @@ def test():
 	# 	print key, "\t", value
 
 
-	test_df = pd.DataFrame(new_dict.items())
+	test_df = pd.DataFrame.from_dict(new_dict)
 	print test_df 
 
 
-	
+
 test()
