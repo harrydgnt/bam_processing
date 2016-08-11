@@ -148,7 +148,9 @@ def test():
 
 
 	test_df = pd.DataFrame.from_dict(new_dict,orient="index")
-	print test_df 
+	test_df.columns = ["G60826"]
+	print test_df
+
 	test_two = pd.DataFrame.from_dict(new_dict_two,orient="index")
 	print test_two
 
@@ -156,7 +158,7 @@ def test():
 	print test_merge_df	
 
 	print "shape, ", test_df.shape, test_two.shape, test_merge_df.shape
-	# TODO - change data structure - dont make it to import the element file with default dict of int
-	# TODO - Make a list and convert it to dict to make it more usable without accessing all over again
+	# TODO - ADD sample name for each column 
+
 
 test()
