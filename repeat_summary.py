@@ -153,7 +153,7 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 			print "Processing: ", sample_name
 			if count == 0:
 				summary_df = pd.DataFrame.from_dict(current_dict, orient = "index")
-				sumamry_df.columns = [sample_name]
+				summary_df.columns = [sample_name]
 				count = -1
 			else: 
 				summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
