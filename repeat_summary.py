@@ -140,7 +140,16 @@ def make_merge_dataframe(original_df, dict_to_add, sample_name):
 	temp_df.columns = [sample_name]
 	return pd.merge(original_df, temp_df, left_index = True, right_index = True)
 
-
+def main(element_list_file, sample_dir, sample_list, outfile):
+	element_list = extract_element(element_list_file)
+	summary_df = pd.DataFrame()
+	os.chdir(sample_dir)
+	with open(sample_list, 'r') as samples:
+		for sample in samples:
+			current_dict = extract_reads(element_list, sample)
+			sample.split('.')[1:3]	
+			summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
+	summary_df.to_csv(outfile, sep = "\t")
 
 def test():
 	element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
@@ -168,3 +177,11 @@ def test():
 
 
 test()
+
+element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
+test_dir = '/u/home/s/serghei/result/unmapped/repeat_unmapped/'
+test_sample = 'test_300.sample'
+outfile = '/u/home/s/serghei/result/repeat_summary.txt'
+main(element_file,test_dir, test_sample, outfile)
+
+
