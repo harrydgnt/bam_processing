@@ -123,3 +123,5 @@ def test():
 	test_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/G60826.GTEX-13O3O-0011-R1b.2.unmapped_after_rRNA_lostHuman.fasta_lostRepeats_blastFormat6.tsv'
 	elem_dict = extract_element(element_file)
 	new_dict = extract_reads(elem_dict, test_file)
+	for key,value in new_dict.iteritems():
+		print key, "\t", value
