@@ -64,7 +64,6 @@ def extract_element(element_list_file):
 	'''	
 	element_dict = {}
 	with open(element_list_file, 'r') as elements:
-		print elements
 		for element in elements:
 			element_dict[str(element.split('>')[1])] = 0
 			print element 
@@ -121,7 +120,7 @@ def extract_reads(element_dict, repeat_file):
 
 
 def test():
-	element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/db/repeat_elements.txt'
+	element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
 	test_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/G60826.GTEX-13O3O-0011-R1b.2.unmapped_after_rRNA_lostHuman.fasta_lostRepeats_blastFormat6.tsv'
 	elem_dict = extract_element(element_file)
 	new_dict = extract_reads(elem_dict, test_file)
