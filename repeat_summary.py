@@ -63,9 +63,9 @@ def extract_element(element_list_file):
 	--> OUT = element_dict
 	'''	
 	element_dict = {}
-	with open(element_list_file, 'w') as elements:
+	with open(element_list_file, 'r') as elements:
 		for element in elements:
-			element_dict[element] = 0
+			element_dict[str(element.split('>')[1])] = 0
 	return element_dict	
 
 def extract_reads(element_dict, repeat_file):
@@ -76,7 +76,7 @@ def extract_reads(element_dict, repeat_file):
 	--> IN = element_dict, tsv file 
 	--> OUT = element_dict with updated num_reads/element
 	'''
-	with open(repeat_file, 'w') as lines:
+	with open(repeat_file, 'r') as lines:
 		status = 0 
 		# status 0 = new read
 		# status 1 = old read - same as the previous one 
