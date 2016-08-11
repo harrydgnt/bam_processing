@@ -86,7 +86,7 @@ def extract_reads(element_dict, repeat_file):
 		for line in lines:
 			# if status == 0:
 			# 	current_read_name = str(line.split()[0])
-			# 	current_read_highest_score = int(line.split()[11])
+			# 	current_read_highest_score = float(line.split()[11])
 			# 	current_read_highest_element = str(line.split()[1])
 
 
@@ -106,7 +106,7 @@ def extract_reads(element_dict, repeat_file):
 			# 1. we use the first entry 
 			# 2. highest score element is on top 
 			name = str(line.split()[0])
-			score = int(line.split()[11])
+			score = float(line.split()[11])
 
 			if name != current_read_name:
 				# ADD THE NUMBER 
