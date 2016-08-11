@@ -125,3 +125,5 @@ def test():
 	new_dict = extract_reads(elem_dict, test_file)
 	for key,value in new_dict.iteritems():
 		print key, "\t", value
+
+test()
