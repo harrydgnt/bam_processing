@@ -147,7 +147,8 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
 			current_dict = extract_reads(element_list, sample)
-			sample.split('.')[1:3]	
+			sample_name = sample.split('.')[1:3]	
+			print "Processing: ", sample_name
 			summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
 	summary_df.to_csv(outfile, sep = "\t")
 
