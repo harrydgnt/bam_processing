@@ -148,7 +148,7 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 		for sample in samples:
 			sample = sample.rstrip()
 			current_dict = extract_reads(element_list, sample)
-			sample_name = sample.split('.')[1:3]	
+			sample_name = ''.join(sample.split('.')[1:3])
 			print "Processing: ", sample_name
 			summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
 	summary_df.to_csv(outfile, sep = "\t")
@@ -178,7 +178,7 @@ def test():
 	# TODO - ADD sample name for each column 
 
 
-test()
+# test()
 
 element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
 test_dir = '/u/home/s/serghei/result/unmapped/repeat_unmapped/'
