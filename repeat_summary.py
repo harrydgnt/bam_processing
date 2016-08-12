@@ -93,9 +93,12 @@ def extract_reads(element_list, repeat_file):
 	element_dict = {}
 	for item in element_list:
 		element_dict[item] = 0
+	num_multimapped = 0
+	num_reads = 0
 	# add number
 	with open(repeat_file, 'r') as lines:
-		status = 0 
+		status = 0;
+
 		# status 0 = new read
 		# status 1 = old read - same as the previous one 
 		current_read_name = ""
@@ -131,9 +134,15 @@ def extract_reads(element_list, repeat_file):
 				element = str(line.split()[1])
 				current_read_name = name
 				element_dict[element] += 1
+				status = 0
+				num_reads += 1
 			else: # if the name is the same
-				continue
-	return element_dict	
+				if status == 0:
+					status = 1 
+					num_multimapped += 1
+				else:
+					continue
+	return element_dict, num_reads, num_multimapped
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
 	temp_df = pd.DataFrame.from_dict(dict_to_add, orient="index")
@@ -148,9 +157,10 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
 			sample = sample.rstrip()
-			current_dict = extract_reads(element_list, sample)
+			current_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
 			sample_name = '.'.join(sample.split('.')[1:3])
-			print "Processing: ", sample_name
+			# print "Processing: ", sample_name
+			print num_reads, num_multimapped
 			if count == 0:
 				summary_df = pd.DataFrame.from_dict(current_dict, orient = "index")
 				summary_df.columns = [sample_name]
