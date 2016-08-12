@@ -136,8 +136,9 @@ def extract_reads(element_list, repeat_file):
 				element_dict[element] += 1
 				status = 0
 				num_reads += 1
+				current_read_highest_score = score
 			else: # if the name is the same
-				if status == 0:
+				if status == 0 and score >= current_read_highest_score:
 					status = 1 
 					num_multimapped += 1
 				else:
