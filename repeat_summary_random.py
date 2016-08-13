@@ -183,7 +183,7 @@ def extract_reads(element_list, repeat_file):
 					num_reads += 1
 					if count != -1:
 						# select random one
-						selected_element = current_element_list[np.random.randint(1000) % len(selected_element)]
+						selected_element = current_element_list[np.random.randint(1000) % len(current_element_list)]
 						# np.random.randint()
 						element_dict[selected_element] += 1 # add one for that element 
 						del current_element_list[:]
