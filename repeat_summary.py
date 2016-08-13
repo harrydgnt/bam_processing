@@ -104,6 +104,10 @@ def extract_reads(element_list, repeat_file):
 		current_read_name = ""
 		current_read_highest_score = -1
 		current_read_highest_element = ""  
+		previous_read_name = ""
+		previous_score = -1 
+		previous_element = "" 
+
 		for line in lines:
 			# if status == 0:
 			# 	current_read_name = str(line.split()[0])
@@ -146,15 +150,22 @@ def extract_reads(element_list, repeat_file):
 			# 		continue
 
 
-
-			if name != current_read_name:
-				# ADD THE NUMBER 
-				element = str(line.split()[1])
-				current_read_name = name
-				element_dict[element] += 1
+			# ELIMINATE THE DUPLICATE ONES 
+			if name != previous_read_name:
+				# # ADD THE NUMBER 
+				# element = str(line.split()[1])
+				# current_read_name = name
+				# element_dict[element] += 1
+				# status = 0
+				# num_reads += 1
+				# current_read_highest_score = score
+				if status == 0:
+					element_dict[previous_element] += 1
+				 
+				previous_read_name = name
+				previous_score = score
+				previous_element = str(line.split()[1])
 				status = 0
-				num_reads += 1
-				current_read_highest_score = score
 			else: # if the name is the same
 				if status == 0 and score >= current_read_highest_score:
 					status = 1 
