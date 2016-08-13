@@ -129,6 +129,24 @@ def extract_reads(element_list, repeat_file):
 			name = str(line.split()[0])
 			score = float(line.split()[11])
 
+			# ORIGINAL - no filtering just number
+			# if name != current_read_name:
+			# 	# ADD THE NUMBER 
+			# 	element = str(line.split()[1])
+			# 	current_read_name = name
+			# 	element_dict[element] += 1
+			# 	status = 0
+			# 	num_reads += 1
+			# 	current_read_highest_score = score
+			# else: # if the name is the same
+			# 	if status == 0 and score >= current_read_highest_score:
+			# 		status = 1 
+			# 		num_multimapped += 1
+			# 	else:
+			# 		continue
+
+
+
 			if name != current_read_name:
 				# ADD THE NUMBER 
 				element = str(line.split()[1])
@@ -142,7 +160,7 @@ def extract_reads(element_list, repeat_file):
 					status = 1 
 					num_multimapped += 1
 				else:
-					continue
+					continue					
 	return element_dict, num_reads, num_multimapped
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
