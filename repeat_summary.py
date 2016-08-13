@@ -4,6 +4,8 @@ import itertools
 import argparse
 import numpy as np 
 import pandas as pd 
+import time
+
 
 ####### 
 # DOCUMENTATION
@@ -183,12 +185,15 @@ def make_merge_dataframe(original_df, dict_to_add, sample_name):
 	return pd.merge(original_df, temp_df, left_index = True, right_index = True)
 
 def main(element_list_file, sample_dir, sample_list, outfile):
+	start_time = time.time()
 	element_list = extract_element(element_list_file)
 	summary_df = pd.DataFrame()
 	os.chdir(sample_dir)
 	count = 0
+	num_processed = 0
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
+			num_processed += 1
 			sample = sample.rstrip()
 			current_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
 			sample_name = '.'.join(sample.split('.')[1:3])
@@ -200,6 +205,9 @@ def main(element_list_file, sample_dir, sample_list, outfile):
 				count = -1
 			else: 
 				summary_df = make_merge_dataframe(summary_df, current_dict, sample_name)
+			if num_processed % 1000 == 0:
+				print "num_processed : ", num_processed
+				print "elapsed_time = ", time.time() - start_time
 	summary_df.to_csv(outfile, sep = "\t")
 
 	# TODO - after indexing everything, add class. family information
