@@ -97,7 +97,7 @@ def extract_reads(element_list, repeat_file):
 	num_reads = 0
 	# add number
 	with open(repeat_file, 'r') as lines:
-		status = 0;
+		status = 1;
 
 		# status 0 = new read
 		# status 1 = old read - same as the previous one 
@@ -109,69 +109,72 @@ def extract_reads(element_list, repeat_file):
 		previous_element = "" 
 
 		for line in lines:
-			# if status == 0:
-			# 	current_read_name = str(line.split()[0])
-			# 	current_read_highest_score = float(line.split()[11])
-			# 	current_read_highest_element = str(line.split()[1])
+			try:
+				# if status == 0:
+				# 	current_read_name = str(line.split()[0])
+				# 	current_read_highest_score = float(line.split()[11])
+				# 	current_read_highest_element = str(line.split()[1])
 
 
-			# 	status = 1
-			# elif status == 1: 
-			# 	name = str(line.split([0]))
-			# 	score = int(line.split()[11])
-			# 	if name == current_read_name: # if we are looking at the same read
-			# 		continue
-			# 	else: # if it is different read
-			# 		status = 0
+				# 	status = 1
+				# elif status == 1: 
+				# 	name = str(line.split([0]))
+				# 	score = int(line.split()[11])
+				# 	if name == current_read_name: # if we are looking at the same read
+				# 		continue
+				# 	else: # if it is different read
+				# 		status = 0
 
 
 
 
-			# below is assmuing two things: 
-			# 1. we use the first entry 
-			# 2. highest score element is on top 
-			name = str(line.split()[0])
-			score = float(line.split()[11])
+				# below is assmuing two things: 
+				# 1. we use the first entry 
+				# 2. highest score element is on top 
+				name = str(line.split()[0])
+				score = float(line.split()[11])
 
-			# ORIGINAL - no filtering just number
-			# if name != current_read_name:
-			# 	# ADD THE NUMBER 
-			# 	element = str(line.split()[1])
-			# 	current_read_name = name
-			# 	element_dict[element] += 1
-			# 	status = 0
-			# 	num_reads += 1
-			# 	current_read_highest_score = score
-			# else: # if the name is the same
-			# 	if status == 0 and score >= current_read_highest_score:
-			# 		status = 1 
-			# 		num_multimapped += 1
-			# 	else:
-			# 		continue
+				# ORIGINAL - no filtering just number
+				# if name != current_read_name:
+				# 	# ADD THE NUMBER 
+				# 	element = str(line.split()[1])
+				# 	current_read_name = name
+				# 	element_dict[element] += 1
+				# 	status = 0
+				# 	num_reads += 1
+				# 	current_read_highest_score = score
+				# else: # if the name is the same
+				# 	if status == 0 and score >= current_read_highest_score:
+				# 		status = 1 
+				# 		num_multimapped += 1
+				# 	else:
+				# 		continue
 
 
-			# ELIMINATE THE DUPLICATE ONES 
-			if name != previous_read_name:
-				# # ADD THE NUMBER 
-				# element = str(line.split()[1])
-				# current_read_name = name
-				# element_dict[element] += 1
-				# status = 0
-				# num_reads += 1
-				# current_read_highest_score = score
-				if status == 0:
-					element_dict[previous_element] += 1
-				 
-				previous_read_name = name
-				previous_score = score
-				previous_element = str(line.split()[1])
-				status = 0
-			else: # if the name is the same
-				if status == 0 and score >= current_read_highest_score:
-					status = 1 
-					num_multimapped += 1
-				else:
-					continue					
+				# ELIMINATE THE DUPLICATE ONES 
+				if name != previous_read_name:
+					# # ADD THE NUMBER 
+					# element = str(line.split()[1])
+					# current_read_name = name
+					# element_dict[element] += 1
+					# status = 0
+					# num_reads += 1
+					# current_read_highest_score = score
+					if status == 0:
+						element_dict[previous_element] += 1
+					 
+					previous_read_name = name
+					previous_score = score
+					previous_element = str(line.split()[1])
+					status = 0
+				else: # if the name is the same
+					if status == 0 and score >= current_read_highest_score:
+						status = 1 
+						num_multimapped += 1
+					else:
+						continue
+			except IndexError:
+				print "index error: ", line					
 	return element_dict, num_reads, num_multimapped
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
@@ -230,7 +233,7 @@ def test():
 
 element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
 test_dir = '/u/home/s/serghei/result/unmapped/repeat_unmapped/'
-test_sample = 'test_300.sample'
+test_sample = 'sample.txt'
 outfile = '/u/home/s/serghei/result/repeat_summary.txt'
 main(element_file,test_dir, test_sample, outfile)
 
