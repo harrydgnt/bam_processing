@@ -323,7 +323,7 @@ def edit_dict(input_dict, position_dict_list):
 			for item in position_dict_list[element]:
 				count +=1 
 				if count % 1000 == 0:
-					print item, element, num_reads
+					print count, item, element, num_reads
 				new_dict[item] += float(num_reads/len(position_dict_list[element]))
 		except KeyError:
 			missing_elements.append(element)
@@ -337,7 +337,7 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 	count = 0
 	num_processed = 0
 	pos_dict = extract_bed(bed_file,element_list)
-	print pos_dict
+	# print pos_dict
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
 			num_processed += 1
