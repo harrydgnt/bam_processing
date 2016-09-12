@@ -316,10 +316,14 @@ def make_merge_dataframe(original_df, dict_to_add, sample_name):
 
 def edit_dict(input_dict, position_dict_list):
 	new_dict = {}
+	missing_elements = []
 	for element, num_reads in input_dict.iteritems():
-		for item in position_dict_list[element]:
-			new_dict[item] += float(num_reads/len(position_dict_list[element]))
-	return new_dict
+		try:
+			for item in position_dict_list[element]:
+				new_dict[item] += float(num_reads/len(position_dict_list[element]))
+		except KeyError:
+			missing_elements.append(element)
+	return new_dict, missing_elements
 
 def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 	start_time = time.time()
@@ -335,7 +339,7 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 			sample = sample.rstrip()
 			temp_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
 			# edit step
-			current_dict = edit_dict(temp_dict, pos_dict)
+			current_dict, missing_elements= edit_dict(temp_dict, pos_dict)
 
 			sample_name = '.'.join(sample.split('.')[1:3])
 			# print "Processing: ", sample_name
@@ -350,7 +354,7 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 				print "num_processed : ", num_processed
 				print "elapsed_time = ", time.time() - start_time
 	summary_df.to_csv(outfile, sep = "\t")
-
+	print missing_elements
 	# TODO - after indexing everything, add class. family information
 
 def test():
