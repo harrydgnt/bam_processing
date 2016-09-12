@@ -333,6 +333,7 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 	count = 0
 	num_processed = 0
 	pos_dict = extract_bed(bed_file,element_list)
+	print pos_dict
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
 			num_processed += 1
