@@ -269,7 +269,7 @@ def extract_reads(element_list, repeat_file, ):
 					del current_element_list[:]
 					current_element_list.append(element)
 				else: # if same read
-					if current_read_highest_score == score;
+					if current_read_highest_score == score:
 						current_element_list.append(element)
 					elif current_read_highest_score > score:
 						continue
