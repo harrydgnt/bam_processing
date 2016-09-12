@@ -221,7 +221,7 @@ def extract_reads_temp(element_list, repeat_file):
 	return element_dict, num_reads, num_multimapped
 
 
-def extract_reads(element_list, repeat_file):
+def extract_reads(element_list, repeat_file, ):
 	'''
 	2. extract each read's element
 	- use the cutoff?
@@ -252,23 +252,6 @@ def extract_reads(element_list, repeat_file):
 		current_element_list = []
 		for line in lines:
 			try:
-				# if status == 0:
-				# 	current_read_name = str(line.split()[0])
-				# 	current_read_highest_score = float(line.split()[11])
-				# 	current_read_highest_element = str(line.split()[1])
-
-
-				# 	status = 1
-				# elif status == 1: 
-				# 	name = str(line.split([0]))
-				# 	score = int(line.split()[11])
-				# 	if name == current_read_name: # if we are looking at the same read
-				# 		continue
-				# 	else: # if it is different read
-				# 		status = 0
-
-
-
 
 				# below is assmuing two things: 
 				# 1. we use the first entry 
@@ -277,71 +260,21 @@ def extract_reads(element_list, repeat_file):
 				score = float(line.split()[11])
 				element = str(line.split()[1])
 
-				# ORIGINAL - no filtering just number
-				# if name != current_read_name:
-				# 	# ADD THE NUMBER 
-				# 	element = str(line.split()[1])
-				# 	current_read_name = name
-				# 	element_dict[element] += 1
-				# 	status = 0
-				# 	num_reads += 1
-				# 	current_read_highest_score = score
-				# else: # if the name is the same
-				# 	if status == 0 and score >= current_read_highest_score:
-				# 		status = 1 
-				# 		num_multimapped += 1
-				# 	else:
-				# 		continue
-
-
-				# # ELIMINATE THE DUPLICATE ONES 
-				# if name != previous_read_name:
-				# 	# # ADD THE NUMBER 
-				# 	# element = str(line.split()[1])
-				# 	# current_read_name = name
-				# 	# element_dict[element] += 1
-				# 	# status = 0
-				# 	# num_reads += 1
-				# 	# current_read_highest_score = score
-				# 	if status == 0:
-				# 		element_dict[previous_element] += 1
-					 
-				# 	previous_read_name = name
-				# 	previous_score = score
-				# 	previous_element = str(line.split()[1])
-				# 	status = 0
-				# else: # if the name is the same
-				# 	if status == 0 and score >= current_read_highest_score:
-				# 		status = 1 
-				# 		num_multimapped += 1
-				# 	else:
-				# 		continue
-
-				# # RANDOMLY SELECT ONE OR THE OTHER 
-				# if name != previous_read_name: 
-				# 	num_reads += 1
-				# 	if count != -1:
-				# 		# select random one
-				# 		selected_element = current_element_list[np.random.randint(1000) % len(current_element_list)]
-				# 		# np.random.randint()
-				# 		element_dict[selected_element] += 1 # add one for that element 
-				# 		del current_element_list[:]
-				# 	current_element_list.append(element)
-				# 	current_read_highest_score = score
-				# 	status = 0
-				# 	count += 1
-				# else:
-				# 	if status == 0 and score >= current_read_highest_score:
-				# 		current_element_list.append(element)
-				# 		num_multimapped += 1
-				# 	else:
-				# 		continue
-
-				# RANDOMLY DISTRIBUTE
-
-
-
-
+				if current_read_name != name: # different read 
+					current_read_name = name
+					current_read_highest_score = score
+					if status != 1:
+						for item in current_element_list:
+							element_dict[item] += float(1/len(current_element_list))
+					del current_element_list[:]
+					current_element_list.append(element)
+				else: # if same read
+					if current_read_highest_score == score;
+						current_element_list.append(element)
+					elif current_read_highest_score > score:
+						continue
+					else: 
+						print "ERROR - not the highest"
 
 			except IndexError:
 				print "index error: ", line
@@ -351,7 +284,7 @@ def extract_reads(element_list, repeat_file):
 	return element_dict, num_reads, num_multimapped
 
 
-def extract_bed(bed_file):
+def extract_bed(bed_file, element_list):
 	"""
 	bed 7 for repeat makser 
 	[chr,start,end,strand, element, class, family]
@@ -361,31 +294,45 @@ def extract_bed(bed_file):
 	elements have multiple positions across the genome 
 	dict(dict(int)) - dict of (element -> position)
 	"""
-	element_dict = {} # this is used for count
+	# element_dict = {} # this is used for count
 	element_dictlist = Dictlist() 
 	for line in bed_file:
 		element = line.split()[4]
-		element_dict[element] = 0
-		element_dictlist[element] = line
-	return element_dict, element_dictlist
+		# element_dict[element] = 0
+		if element in element_list:
+			element_dictlist[element] = line
+		else:
+			continue
+	return element_dictlist
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
 	temp_df = pd.DataFrame.from_dict(dict_to_add, orient="index")
 	temp_df.columns = [sample_name]
 	return pd.merge(original_df, temp_df, left_index = True, right_index = True)
 
-def main(element_list_file, sample_dir, sample_list, outfile):
+def edit_dict(input_dict, position_dict_list):
+	new_dict = {}
+	for element, num_reads in input_dict.iteritems:
+		for item in position_dict_list[element]:
+			new_dict[item] += float(num_reads/len(position_dict_list[element]))
+	return new_dict
+
+def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 	start_time = time.time()
 	element_list = extract_element(element_list_file)
 	summary_df = pd.DataFrame()
 	os.chdir(sample_dir)
 	count = 0
 	num_processed = 0
+	pos_dict = extract_bed(bed_file,element_list)
 	with open(sample_list, 'r') as samples:
 		for sample in samples:
 			num_processed += 1
 			sample = sample.rstrip()
-			current_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
+			temp_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
+			# edit step
+			current_dict = edit_dict(temp_dict, pos_dict)
+
 			sample_name = '.'.join(sample.split('.')[1:3])
 			# print "Processing: ", sample_name
 			print num_reads, num_multimapped
@@ -433,6 +380,7 @@ element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.tx
 test_dir = '/u/home/s/serghei/result/unmapped/repeat_unmapped/'
 test_sample = 'sample.txt'
 outfile = '/u/home/s/serghei/result/repeat_summary_random.txt'
-main(element_file,test_dir, test_sample, outfile)
+bedfile = '/u/home/h/harryyan/project-eeskin/gtex_repeat/db/library/repetitiveElements_hg19.bed7'
+main(element_file,test_dir, test_sample, outfile, bedfile)
 
 
