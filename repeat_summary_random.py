@@ -340,7 +340,8 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 			temp_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
 			# edit step
 			current_dict, missing_elements= edit_dict(temp_dict, pos_dict)
-
+			if count == 0:
+				print current_dict, sample
 			sample_name = '.'.join(sample.split('.')[1:3])
 			# print "Processing: ", sample_name
 			print num_reads, num_multimapped
