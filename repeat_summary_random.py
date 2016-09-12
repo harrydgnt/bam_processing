@@ -55,6 +55,14 @@ PLAN
 4. Transpose the matrix 
 
 """
+class Dictlist(dict):
+    def __setitem__(self, key, value):
+        try:
+            self[key]
+        except KeyError:
+            super(Dictlist, self).__setitem__(key, [])
+        self[key].append(value)
+
 def extract_element(element_list_file):
 	'''
 	1. extract element names from the list of elements
@@ -63,9 +71,10 @@ def extract_element(element_list_file):
 	--> OUT = element_dict
 	'''	
 	element_list = []
+
 	with open(element_list_file, 'r') as elements:
 		for element in elements:
-			element_list.append(str(element.split('>')[1].rstrip().split()[0]))
+			element_list.append(str(element.split('>')[1].rstrip().split()[0].split('/')[0]))
 	return element_list
 
 # def make_element_dict(element_list):
@@ -81,6 +90,136 @@ def extract_element(element_list_file):
 # 			element_dict[str(element.split('>')[1].rstrip().split()[0])] = 0
 # 			# print str(element.split('>')[1].rstrip().split()[
 # 	return element_dict	
+
+def extract_reads_temp(element_list, repeat_file):
+	'''
+	2. extract each read's element
+	- use the cutoff?
+	- what to do with the multi-mapped read?  
+	--> IN = element_dict, tsv file 
+	--> OUT = element_dict with updated num_reads/element
+	'''
+
+	# make dict from element list 
+	element_dict = {}
+	for item in element_list:
+		element_dict[item] = 0
+	num_multimapped = 0
+	num_reads = 0
+	# add number
+	with open(repeat_file, 'r') as lines:
+		status = 1
+		count = -1
+
+		# status 0 = new read
+		# status 1 = old read - same as the previous one 
+		current_read_name = ""
+		current_read_highest_score = -1
+		current_read_highest_element = ""  
+		previous_read_name = ""
+		previous_score = -1 
+		previous_element = "" 
+		current_element_list = []
+		for line in lines:
+			try:
+				# if status == 0:
+				# 	current_read_name = str(line.split()[0])
+				# 	current_read_highest_score = float(line.split()[11])
+				# 	current_read_highest_element = str(line.split()[1])
+
+
+				# 	status = 1
+				# elif status == 1: 
+				# 	name = str(line.split([0]))
+				# 	score = int(line.split()[11])
+				# 	if name == current_read_name: # if we are looking at the same read
+				# 		continue
+				# 	else: # if it is different read
+				# 		status = 0
+
+
+
+
+				# below is assmuing two things: 
+				# 1. we use the first entry 
+				# 2. highest score element is on top 
+				name = str(line.split()[0])
+				score = float(line.split()[11])
+				element = str(line.split()[1])
+
+				# ORIGINAL - no filtering just number
+				# if name != current_read_name:
+				# 	# ADD THE NUMBER 
+				# 	element = str(line.split()[1])
+				# 	current_read_name = name
+				# 	element_dict[element] += 1
+				# 	status = 0
+				# 	num_reads += 1
+				# 	current_read_highest_score = score
+				# else: # if the name is the same
+				# 	if status == 0 and score >= current_read_highest_score:
+				# 		status = 1 
+				# 		num_multimapped += 1
+				# 	else:
+				# 		continue
+
+
+				# # ELIMINATE THE DUPLICATE ONES 
+				# if name != previous_read_name:
+				# 	# # ADD THE NUMBER 
+				# 	# element = str(line.split()[1])
+				# 	# current_read_name = name
+				# 	# element_dict[element] += 1
+				# 	# status = 0
+				# 	# num_reads += 1
+				# 	# current_read_highest_score = score
+				# 	if status == 0:
+				# 		element_dict[previous_element] += 1
+					 
+				# 	previous_read_name = name
+				# 	previous_score = score
+				# 	previous_element = str(line.split()[1])
+				# 	status = 0
+				# else: # if the name is the same
+				# 	if status == 0 and score >= current_read_highest_score:
+				# 		status = 1 
+				# 		num_multimapped += 1
+				# 	else:
+				# 		continue
+
+				# # RANDOMLY SELECT ONE OR THE OTHER 
+				# if name != previous_read_name: 
+				# 	num_reads += 1
+				# 	if count != -1:
+				# 		# select random one
+				# 		selected_element = current_element_list[np.random.randint(1000) % len(current_element_list)]
+				# 		# np.random.randint()
+				# 		element_dict[selected_element] += 1 # add one for that element 
+				# 		del current_element_list[:]
+				# 	current_element_list.append(element)
+				# 	current_read_highest_score = score
+				# 	status = 0
+				# 	count += 1
+				# else:
+				# 	if status == 0 and score >= current_read_highest_score:
+				# 		current_element_list.append(element)
+				# 		num_multimapped += 1
+				# 	else:
+				# 		continue
+
+				# RANDOMLY DISTRIBUTE
+
+
+
+
+
+			except IndexError:
+				print "index error: ", line
+
+
+
+	return element_dict, num_reads, num_multimapped
+
 
 def extract_reads(element_list, repeat_file):
 	'''
@@ -178,25 +317,27 @@ def extract_reads(element_list, repeat_file):
 				# 	else:
 				# 		continue
 
-				# RANDOMLY SELECT ONE OR THE OTHER 
-				if name != previous_read_name: 
-					num_reads += 1
-					if count != -1:
-						# select random one
-						selected_element = current_element_list[np.random.randint(1000) % len(current_element_list)]
-						# np.random.randint()
-						element_dict[selected_element] += 1 # add one for that element 
-						del current_element_list[:]
-					current_element_list.append(element)
-					current_read_highest_score = score
-					status = 0
-					count += 1
-				else:
-					if status == 0 and score >= current_read_highest_score:
-						current_element_list.append(element)
-						num_multimapped += 1
-					else:
-						continue
+				# # RANDOMLY SELECT ONE OR THE OTHER 
+				# if name != previous_read_name: 
+				# 	num_reads += 1
+				# 	if count != -1:
+				# 		# select random one
+				# 		selected_element = current_element_list[np.random.randint(1000) % len(current_element_list)]
+				# 		# np.random.randint()
+				# 		element_dict[selected_element] += 1 # add one for that element 
+				# 		del current_element_list[:]
+				# 	current_element_list.append(element)
+				# 	current_read_highest_score = score
+				# 	status = 0
+				# 	count += 1
+				# else:
+				# 	if status == 0 and score >= current_read_highest_score:
+				# 		current_element_list.append(element)
+				# 		num_multimapped += 1
+				# 	else:
+				# 		continue
+
+				# RANDOMLY DISTRIBUTE
 
 
 
@@ -208,6 +349,25 @@ def extract_reads(element_list, repeat_file):
 
 
 	return element_dict, num_reads, num_multimapped
+
+
+def extract_bed(bed_file):
+	"""
+	bed 7 for repeat makser 
+	[chr,start,end,strand, element, class, family]
+
+	IN - repeat masker bed file 
+	OUT = dict? list of things?
+	elements have multiple positions across the genome 
+	dict(dict(int)) - dict of (element -> position)
+	"""
+	element_dict = {} # this is used for count
+	element_dictlist = Dictlist() 
+	for line in bed_file:
+		element = line.split()[4]
+		element_dict[element] = 0
+		element_dictlist[element] = line
+	return element_dict, element_dictlist
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
 	temp_df = pd.DataFrame.from_dict(dict_to_add, orient="index")
