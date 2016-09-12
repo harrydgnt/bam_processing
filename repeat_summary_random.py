@@ -316,7 +316,7 @@ def make_merge_dataframe(original_df, dict_to_add, sample_name):
 
 def edit_dict(input_dict, position_dict_list):
 	new_dict = {}
-	for element, num_reads in input_dict.iteritems:
+	for element, num_reads in input_dict.iteritems():
 		for item in position_dict_list[element]:
 			new_dict[item] += float(num_reads/len(position_dict_list[element]))
 	return new_dict
