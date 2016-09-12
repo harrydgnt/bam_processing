@@ -343,6 +343,7 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 			num_processed += 1
 			sample = sample.rstrip()
 			temp_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
+			print temp_dict	
 			# edit step
 			current_dict, missing_elements= edit_dict(temp_dict, pos_dict)
 			if count == 0:
