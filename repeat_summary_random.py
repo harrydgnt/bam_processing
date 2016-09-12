@@ -317,9 +317,13 @@ def make_merge_dataframe(original_df, dict_to_add, sample_name):
 def edit_dict(input_dict, position_dict_list):
 	new_dict = {}
 	missing_elements = []
+	count = 0
 	for element, num_reads in input_dict.iteritems():
 		try:
 			for item in position_dict_list[element]:
+				count +=1 
+				if count % 1000 == 0:
+					print item, element, num_reads
 				new_dict[item] += float(num_reads/len(position_dict_list[element]))
 		except KeyError:
 			missing_elements.append(element)
