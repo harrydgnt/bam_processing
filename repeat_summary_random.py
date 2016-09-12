@@ -295,17 +295,18 @@ def extract_bed(bed_file, element_list):
 	dict(dict(int)) - dict of (element -> position)
 	"""
 	# element_dict = {} # this is used for count
-	element_dictlist = Dictlist() 
-	for line in bed_file:
-		try:
-			element = line.split()[4]
-			# element_dict[element] = 0
-			if element in element_list:
-				element_dictlist[element] = line
-			else:
-				continue
-		except IndexError:
-			print line
+	element_dictlist = Dictlist()
+	with open(bed_file, 'r') as f:
+		for line in f:
+			try:
+				element = line.split()[4]
+				# element_dict[element] = 0
+				if element in element_list:
+					element_dictlist[element] = line
+				else:
+					continue
+			except IndexError:
+				print line
 	return element_dictlist
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
