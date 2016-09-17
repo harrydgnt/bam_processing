@@ -74,7 +74,7 @@ def extract_element(element_list_file):
 
 	with open(element_list_file, 'r') as elements:
 		for element in elements:
-			element_list.append(str(element.split('>')[1].rstrip().split()[0].split('/')[0]))
+			element_list.append(str((element.split('>')[1].rstrip().split()[0].split('/')[0].split('-')[0])).lower())
 	return element_list
 
 # def make_element_dict(element_list):
@@ -302,7 +302,7 @@ def extract_bed(bed_file, element_list):
 				element = line.split()[4]
 				# element_dict[element] = 0
 				if element in element_list:
-					element_dictlist[element] = line.rstrip()
+					element_dictlist[element.lower()] = line.rstrip()
 				else:
 					continue
 			except IndexError:
