@@ -302,7 +302,7 @@ def extract_bed(bed_file, element_list):
 				element = line.split()[4]
 				# element_dict[element] = 0
 				if element in element_list:
-					element_dictlist[element] = line
+					element_dictlist[element] = line.rstrip()
 				else:
 					continue
 			except IndexError:
