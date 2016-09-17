@@ -221,7 +221,7 @@ def extract_reads_temp(element_list, repeat_file):
 	return element_dict, num_reads, num_multimapped
 
 
-def extract_reads(element_list, repeat_file, ):
+def extract_reads(element_list, repeat_file):
 	'''
 	2. extract each read's element
 	- use the cutoff?
