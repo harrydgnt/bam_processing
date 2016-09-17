@@ -322,8 +322,8 @@ def edit_dict(input_dict, position_dict_list):
 	print "len(inputdict)", len(input_dict)
 	for element, num_reads in input_dict.iteritems():
 		count_two += 1 
-		if count % 100 == 0:
-			print "element", element, num_reads
+		if count_two % 100 == 0:
+			print "element", count_two, element, num_reads
 		try:
 			for item in position_dict_list[element]:
 				count = count + 1 
@@ -332,6 +332,7 @@ def edit_dict(input_dict, position_dict_list):
 				new_dict[item] += float(num_reads/len(position_dict_list[element]))
 		except KeyError:
 			missing_elements.append(element)
+	print count
 	return new_dict, missing_elements
 
 def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
