@@ -322,7 +322,7 @@ def edit_dict(input_dict, position_dict_list):
 		try:
 			for item in position_dict_list[element]:
 				count +=1 
-				if count % 10 == 0:
+				if count % 2 == 0:
 					print count, item, element, num_reads
 				new_dict[item] += float(num_reads/len(position_dict_list[element]))
 		except KeyError:
@@ -344,8 +344,9 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 			sample = sample.rstrip()
 			temp_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
 			print "this is temp dict :", temp_dict	
+			print "this is pos dict :", pos_dict
 			# edit step
-			current_dict, missing_elements= edit_dict(temp_dict, pos_dict)
+			current_dict, missing_elements = edit_dict(temp_dict, pos_dict)
 			if count == 0:
 				print current_dict, sample
 			sample_name = '.'.join(sample.split('.')[1:3])
