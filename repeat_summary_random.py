@@ -306,7 +306,7 @@ def extract_bed(bed_file, element_list):
 				else:
 					continue
 			except IndexError:
-				print line
+				print "missing",line.rstrip()
 	return element_dictlist
 
 def make_merge_dataframe(original_df, dict_to_add, sample_name):
@@ -343,7 +343,7 @@ def main(element_list_file, sample_dir, sample_list, outfile, bed_file):
 			num_processed += 1
 			sample = sample.rstrip()
 			temp_dict, num_reads, num_multimapped = extract_reads(element_list, sample)
-			print temp_dict	
+			print "this is temp dict :", temp_dict	
 			# edit step
 			current_dict, missing_elements= edit_dict(temp_dict, pos_dict)
 			if count == 0:
