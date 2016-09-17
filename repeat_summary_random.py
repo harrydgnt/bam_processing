@@ -319,6 +319,7 @@ def edit_dict(input_dict, position_dict_list):
 	missing_elements = []
 	count = 0
 	count_two = 0
+	print "len(inputdict)", len(input_dict)
 	for element, num_reads in input_dict.iteritems():
 		count_two += 1 
 		if count % 100 == 0:
