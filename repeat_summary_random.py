@@ -400,7 +400,7 @@ def test():
 
 element_file = '/u/home/h/harryyan/project-eeskin/gtex_repeat/repeat_elements.txt'
 test_dir = '/u/home/s/serghei/result/unmapped/repeat_unmapped/'
-test_sample = 'sample.txt'
+test_sample = 'new.txt'
 outfile = '/u/home/h/harryyan/project-eeskin/gtex_repeat/test_matrix.txt'
 bedfile = '/u/home/h/harryyan/project-eeskin/gtex_repeat/db/library/repetitiveElements_hg19.bed7'
 main(element_file,test_dir, test_sample, outfile, bedfile)
